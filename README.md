@@ -1,1 +1,1 @@
-# Mavericks_CRUD-Rest-APIs
+# Mavericks - Simple CRUD Rest APIs
