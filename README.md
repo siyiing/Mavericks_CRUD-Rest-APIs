@@ -20,9 +20,9 @@
 - `npm run dev`
 - `npx tsc -w`
 
-- npm i helmet
+- npm i helmet (ignore)
 
-- Specfic port to use: `export PORT=5000`
+- Specfic port to use: `export PORT=5000` (ignore)
 
   "devDependencies": {
   "@types/express": "^4.17.17",
@@ -32,18 +32,16 @@
   },
   "dependencies": {
   "express": "^4.18.2",
-  "helmet": "^7.0.0",
   "nodemon": "^2.0.22"
   }
 
-// NOTE: 
+// NOTE:
 // routes import controller  
-// controller import services 
-// services import the models 
+// controller import services
+// services import the models
 
-
-// Methods in app 
+// Methods in app
 // app.get()
-// app.post() 
+// app.post()
 // app.put()
 // app.delete()
