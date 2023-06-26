@@ -22,38 +22,52 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteEmployeeById = exports.updateEmployeeById = exports.getEmployeeById = exports.createEmployee = exports.getAllEmployee = exports.getBasePath = void 0;
+exports.getAllEmployee = exports.getBasePath = void 0;
 const Services = __importStar(require("../services/employee.services"));
 // BASE PATH 
 function getBasePath(req, res) {
-    res.send('Employee Operations');
+    return __awaiter(this, void 0, void 0, function* () {
+        res.send('Employee Operations');
+    });
 }
 exports.getBasePath = getBasePath;
 // RETURN ALL EMPLOYEES
 function getAllEmployee(req, res) {
-    try {
-        const emp = Services.getAllEmployeeService();
-        res.status(200).send(emp);
-    }
-    catch (e) {
-        res.status(500).send('500 server internal error');
-    }
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const emp = Services.getAllEmployeeService();
+            res.status(200).json(emp);
+        }
+        catch (e) {
+            res.status(500).json({ errorMessage: '500 server internal error' });
+        }
+    });
 }
 exports.getAllEmployee = getAllEmployee;
-// CREATE NEW EMPLOYEE 
-function createEmployee(req, res) {
+/*
+// CREATE NEW EMPLOYEE
+export function createEmployee(req: Request, res: Response) {
     try {
         const emp = Services.createEmployeeService(req.body.name, req.body.salary, req.body.department.toUpperCase());
         res.status(200).send(emp);
     }
     catch (e) {
-        res.status(500).send('500 server internal error');
+        res.status(500).send({errorMessage: '500 server internal error'});
     }
 }
-exports.createEmployee = createEmployee;
+
 // GET EMPLOYEE BY ID
-function getEmployeeById(req, res) {
+export function getEmployeeById(req: Request, res: Response) {
     try {
         const emp = Services.getEmployeeByIdService(req.params.emp_id);
         if (!emp)
@@ -64,31 +78,37 @@ function getEmployeeById(req, res) {
         res.status(500).send('500 server internal error');
     }
 }
-exports.getEmployeeById = getEmployeeById;
-// UPDATE EMPLOYEE 
-// 304 
-function updateEmployeeById(req, res) {
+
+// UPDATE EMPLOYEE
+export function updateEmployeeById(req: Request, res: Response) {
     try {
         const emp = Services.getEmployeeByIdService(req.params.emp_id);
-        // not exist 
+        
+        // not exist
         if (!emp)
             return res.status(404).send('employee id not found');
-        const inputEmp = { id: +req.params.emp_id, name: req.body.name, salary: req.body.salary, department: req.body.department };
+        
+
+        const inputEmp: EmployeeI = { id: +req.params.emp_id, name: req.body.name, salary: req.body.salary, department: req.body.department};
         const status = Services.updateEmployeeByIdService(emp, inputEmp);
+
         switch (status) {
             case 304:
+                res.statusMessage = 'no change';
                 return res.sendStatus(304);
             case emp:
-                return res.status(200).send(emp); // send updated employee 
+                return res.status(200).send(emp); // send updated employee
         }
     }
     catch (e) {
         res.status(500).send('500 server internal error');
     }
 }
-exports.updateEmployeeById = updateEmployeeById;
-function deleteEmployeeById(req, res) {
+
+export function deleteEmployeeById(req: Request, res: Response) {
+
     const status = Services.deleteEmployeeByIdService(req.params.emp_id);
+
     switch (status) {
         case 204:
             return res.status(204).send(status);
@@ -98,4 +118,5 @@ function deleteEmployeeById(req, res) {
             res.status(500).send('500 server internal error');
     }
 }
-exports.deleteEmployeeById = deleteEmployeeById;
+
+*/

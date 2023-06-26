@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.validateEmployee = void 0;
 const joi_1 = __importDefault(require("joi"));
-const employee_model_1 = require("../models/employee.model");
+const employee_model_1 = require("../the.models/employee.model");
 function validateEmployee(req, res, next) {
     if (typeof (req.body.salary) != 'number')
         return res.status(400).send('salary must be number');

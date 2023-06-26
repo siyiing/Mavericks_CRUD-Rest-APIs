@@ -1,5 +1,5 @@
 import joi from 'joi';
-import { Employee, Department } from '../models/employee.model';
+import { Department } from '../the.models/employee.model';
 import { Response, Request, NextFunction } from 'express';
 
 
