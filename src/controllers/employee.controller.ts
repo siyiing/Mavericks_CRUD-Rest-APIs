@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import * as Services from '../services/employee.services'
-import { EmployeeI } from '../the.models/employee.model';
+import { EmployeeI } from '../models/employee.model';
 
 // BASE PATH 
 export async function getBasePath(req: Request, res: Response) {
@@ -17,6 +17,18 @@ export async function getAllEmployee(req: Request, res: Response) {
         res.status(500).json({errorMessage: e});
    }
 }
+
+// RETURN EMPLOYEE  BY DEPARTMENT ID
+export async function getEmployeessByDepartmentId(req: Request, res: Response) {
+    try {
+        const user = await Services.getEmployeessByDepartmentIdService(req.params.departmentId);
+        res.status(200).json(user); 
+   }
+   catch (e) {
+        res.status(500).json({errorMessage: e});
+   }
+}
+
 
 
 // CREATE NEW EMPLOYEE 
@@ -49,7 +61,6 @@ export async function getEmployeeById(req: Request, res: Response) {
 export async function updateEmployeeById(req: Request, res: Response) {
     try {
         const emp = await Services.getEmployeeByIdService(req.params.emp_id);
-        
         // not exist 
         if (!emp)
             return res.status(404).json({errorMessage: 'employee id not found'});

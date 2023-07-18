@@ -13,9 +13,14 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
 
-    // toJSON() {
-    //   return { ...this.get(), uuid: undefined, createdAt: undefined, updatedAt: undefined}
-    // }
+    toJSON() {
+      return {
+        ...this.get(),
+        uuid: undefined,
+        createdAt: undefined,
+        updatedAt: undefined,
+      };
+    }
   }
 
   Employee.init(

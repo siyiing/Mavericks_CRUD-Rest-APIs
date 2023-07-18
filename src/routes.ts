@@ -1,6 +1,8 @@
 import { Express } from 'express';
 import * as EmployeeController from './controllers/employee.controller';
 import { validateEmployee } from './controllers/employee.request.controller';
+import * as UserController from './controllers/user.controller';
+import { validateUser } from './controllers/user.request.controller';
 
 function routes(app: Express) {
 
@@ -21,6 +23,18 @@ function routes(app: Express) {
 
     // DELETE EMPLOYEE BY ID 
     app.delete('/employee/:emp_id', EmployeeController.deleteEmployeeById);
+
+    // RETURN ALL THE USER
+    app.get('/user', UserController.getAllUser);
+
+    // CREATE A NEW USER 
+    app.post('/user', validateUser, UserController.createUser);
+
+    // GET USER BY USERNAME
+    app.get('/user/:username', UserController.getUserByUsername);
+
+    // RETURN EMPLOYEES BY DEPARTMENT ID
+    app.get('/employees/:departmentId', EmployeeController.getEmployeessByDepartmentId);
 }
 
 export default routes;

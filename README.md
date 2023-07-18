@@ -46,26 +46,24 @@
 // app.put()
 // app.delete()
 
-
 - `npm i sequelize`
-- install sequelize and postgresql: `npm install sequelize pg pg-hstore` 
+- install sequelize and postgresql: `npm install sequelize pg pg-hstore`
 - install sequelize cli: `sudo npm install -g sequelize-cli`
 
 - `sequelize init` (create config, model, migration, seeders folder)
-- In config.json, under development, change the username, password, database and dialect 
+- In config.json, under development, change the username, password, database and dialect
 
   "development": {
-    "username": "postgres",
-    "password": "siying",
-    "database": "sequelize_tut_db",
-    "host": "127.0.0.1",
-    "dialect": "postgres"
+  "username": "postgres",
+  "password": "siying",
+  "database": "sequelize_tut_db",
+  "host": "127.0.0.1",
+  "dialect": "postgres"
   },
-
 
 - To show the list of commands: `sequelize`
 - To create db: `sequelize db:create`
-- Create table aka create a js file  `sequelize model:generate --name User --attributes name:string,email:string,role:string`
+- Create table aka create a js file `sequelize model:generate --name User --attributes name:string,email:string,role:string`
 
 - install express
 
@@ -73,23 +71,30 @@
 
 - To run migration: `sequelize db:migrate`
 
-
 - Create POST request, `sequelize model:generate --name Post --attributes body:string`
 
- tableName: 'users',
-
-
+tableName: 'users',
 
 - Seeder
 - `sequelize seed:generate --name create-fake-users`
 - `sequelize db:seed:all`
 
-
 - `touch .gitignore`
-- node_modules/
+- \*\*/node_modules/
 
+# React
 
+- Create React + Typescript project (with existing folder): `npx create-react-app . --template typescript`
+
+- Default download MUI: `npm install @mui/material @emotion/react @emotion/styled`
+
+- Redux: `npm i redux react-redux`
+- `npm i redux-thunk @types/redux-thunk`
+
+- Run: `npm start`
+
+`npm i cors`
 
 option > to go
-import option . 
-for all method function is res. option space 
+import option .
+for all method function is res. option space
