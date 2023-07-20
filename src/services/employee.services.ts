@@ -5,6 +5,7 @@ export async function getAllEmployeeService(): Promise<EmployeeI> {
     return new Promise (async (resolve, reject) => {
         try {
             const emp = await Employee.findAll();
+
             return resolve(emp);
         } catch (e) {
             return reject(e);
@@ -27,7 +28,7 @@ export async function getEmployeessByDepartmentIdService(deptid: string): Promis
 
              emp = await Employee.findAll({ where: { department} });
         }
-        
+
         return resolve(emp);
       } catch (e) {
         return reject(e);

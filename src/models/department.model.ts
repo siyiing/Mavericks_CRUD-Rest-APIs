@@ -7,11 +7,6 @@ export interface DepartmentAttributes {
 }
 
  export default class Department extends Model<DepartmentAttributes> implements DepartmentAttributes {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
 
     id!: number;
     name!: string;

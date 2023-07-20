@@ -98,3 +98,84 @@ tableName: 'users',
 option > to go
 import option .
 for all method function is res. option space
+
+######################################################################
+
+- `npm install bcryptjs`
+
+######################################################################
+# JWT
+
+- `npm i epxress jsonwebtoken dotenv`
+-  `npm install cookie-parser`
+
+
+######################################################################
+# JWT 
+
+CMD: - `npm install jsonwebtoken dotenv`
+`npm i --save-dev @types/jsonwebtoken`
+
+Create .env file at root directory to store secret key for JWT:
+-  `JWT_SECRET='apple-banana-papaya'`
+
+Create a server.ts, and load secret key: - 
+
+`import dotenv from 'dotenv';`
+`dotenv.config();`
+`const JWT_SECRET = process.env.JWT_SECRET;`
+
+Create a JWT inside the login or signup route: - when user login or signup, we create a JWT that represent their session 
+
+`import jwt from 'jsonwebtoken';`
+`// ...`
+`const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn:'1h' });  // 1 hour expiration`
+
+Send JWT to client: - the client needs the JWT in order to make authenticated request // we need to include the token in our response 
+
+`res.json({ token, userId: user.id });`
+
+Use JWT in requests: - the client includues the JWT in the authorization header of subsequent requests
+
+`Authorization: Bearer your_jwt_token`
+
+Verify the JWT: - in server middleware, verify the JWT from the authroization header of incoming request 
+
+```
+import express from 'express';
+import jwt from 'jsonwebtoken';
+
+const app = express();
+
+app.use((req, res, next) => {
+  const authHeader = req.headers.authorization;
+
+  if (authHeader) {
+    const token = authHeader.split(' ')[1];
+
+    jwt.verify(token, JWT_SECRET, (err, user) => {
+      if (err) {
+        return res.sendStatus(403);
+      }
+
+      req.user = user;
+      next();
+    });
+  } else {
+    res.sendStatus(401);
+  }
+});
+```
+
+Access user data in routes: - inside the routes, we can now access `req.user` to get the user data encoded in the JWT
+
+```
+app.get('/someRoute', (req, res) => {
+  console.log(req.user);  // prints the user data from the JWT
+  //...
+});
+```
+
+Note to handle:
+- expired tokens
+- invalid tokens 
