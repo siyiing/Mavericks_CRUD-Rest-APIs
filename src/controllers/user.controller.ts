@@ -23,12 +23,6 @@ export async function createUser(req: Request, res: Response) {
         const user = await Services.createUserService(req.body.username, req.body.password, req.body.departmentId ); 
 
         if (user.username !== '') {
-            // let token = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN_SECRET as string, {expiresIn: 1 * 24 * 60 * 60 * 1000});
-            // res.cookie("token", token, { maxAge: 1 * 24 * 60 * 60, httpOnly: true });
-
-            // console.log("CREATE USER", JSON.stringify(user, null, 2));
-            // console.log("TOKEN", token);
-
             //  res.status(200).json(user); //send users details
             return res.sendStatus(200);
         }
@@ -55,15 +49,14 @@ export async function loginUser(req: Request, res: Response) {
             // if password is the same, generate token with the user's id and secretkey in the env file 
             if (isSame) {
                 const token = jwt.sign({username: user.username}, process.env.ACCESS_TOKEN_SECRET as string, { expiresIn: 1*24*60*60*1000});
-                // if password mathes with the one in database, generate a cookie for the user
 
+                // if password mathes with the one in database, generate a cookie for the user
                 res.cookie("token", token, { httpOnly: true})
-                console.log('LOGIN USER', JSON.stringify(user, null, 2))
-                console.log('LOGIN TOKEN', token);
+                // console.log('LOGIN USER', JSON.stringify(user, null, 2))
+                // console.log('LOGIN TOKEN', token);
 
                 // res.status(200).json(user); // send user data 
-                return res.status(200).json({message: 'login successfully', token: token, requestState: 1})
-
+                return res.status(200).json({user, message: 'login successfully', token: token, requestState: 1})
             } 
             else {
                 return res.status(401).json({message: 'password incorrect', requestState: 0});
@@ -79,5 +72,20 @@ export async function loginUser(req: Request, res: Response) {
     }
 }
 
-
+export async function logoutUser(req: Request, res: Response) {
+    try {
+        const token = req.cookies["token"];
+        const blacklistedTokens = new Set();
+        const result = await Services.logoutUserService(token);
+        if (result) {
+            blacklistedTokens.add(token);
+            res.clearCookie('token');
+            return res.status(200).json({success: 1});
+        }
+        else {return res.status(403).json({success: 0});}
+    } catch (e) {
+        res.status(500).json({errorMessage: e});
+        console.log('e')
+    }
+}
 

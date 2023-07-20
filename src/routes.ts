@@ -28,10 +28,13 @@ function routes(app: Express) {
     app.get('/user', authenticateToken, UserController.getAllUser);
 
     // CREATE A NEW USER // JWT 
-    app.post('/user', validateUser, UserController.createUser); // NEED AUTHENICATE
+    app.post('/user', validateUser, UserController.createUser);
 
-    // GET USER BY USERNAME // JWT // LOGIN
-    app.post('/userlogin', UserController.loginUser); // /:username // POST 
+    // LOGIN // JWT 
+    app.post('/userlogin', UserController.loginUser); 
+
+    // LOGOUT // JWT 
+    app.post('/userlogout', UserController.logoutUser); 
 
     // RETURN EMPLOYEES BY DEPARTMENT ID // NOT USING 
     app.get('/employees/:departmentId', authenticateToken, EmployeeController.getEmployeessByDepartmentId);

@@ -1,6 +1,11 @@
 import { UserAttributes, User } from "../models/user.model";
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+dotenv.config()
 
 const bcrypt = require("bcryptjs"); // for password hashing
+
+
 
 // RETURN ALL USER
 export async function getAllUserService(): Promise<UserAttributes[]> {
@@ -54,3 +59,17 @@ export async function loginUserService(username: string): Promise<UserAttributes
     })
 }
 
+export async function logoutUserService(token: string):  Promise<boolean> {
+    return new Promise (async (resolve, reject) => {
+        try {
+            jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string, (err, decoded) => {
+                if (err)  return resolve(false);
+                else return resolve(true);
+                
+              });
+
+        } catch (e) {
+            return reject(e);   
+        }
+    })
+}

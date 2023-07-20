@@ -4,7 +4,7 @@ import { EmployeeI } from '../models/employee.model';
 
 // BASE PATH 
 export async function getBasePath(req: Request, res: Response) {
-    res.send('Employee Operations');
+    res.json({message: "employee operations"});
 }
 
 // RETURN ALL EMPLOYEES
