@@ -2,7 +2,7 @@ import { Express } from 'express';
 import * as EmployeeController from './controllers/employee.controller';
 import { validateEmployee } from './controllers/employee.request.controller';
 import * as UserController from './controllers/user.controller';
-import { authenticateToken, validateUser } from './controllers/user.request.controller';
+import { authenticateToken, validateUser, auth } from './controllers/user.request.controller';
 
 function routes(app: Express) {
 
@@ -38,6 +38,9 @@ function routes(app: Express) {
 
     // RETURN EMPLOYEES BY DEPARTMENT ID // NOT USING 
     app.get('/employees/:departmentId', authenticateToken, EmployeeController.getEmployeessByDepartmentId);
+
+    // AUTH 
+    app.post('/userauth', auth, UserController.getAuth); 
 
 }
 

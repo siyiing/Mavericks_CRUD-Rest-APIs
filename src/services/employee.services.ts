@@ -18,15 +18,19 @@ export async function getEmployeessByDepartmentIdService(deptid: string): Promis
     return new Promise(async (resolve, reject) => {
       try {
 
-        let department = "";
-        let emp ; 
-        if (deptid === '3') {
-            emp = await Employee.findAll();
-        } else {
-             if ( deptid === '1') department = 'HR' 
-             else if (deptid === '2') department = 'PS'
+        let emp; 
+        let deptMap = new Map<Number, string>();
+        deptMap.set(1, "HR")
+        deptMap.set(2, "PS");
 
-             emp = await Employee.findAll({ where: { department} });
+        console.log('hash map', deptMap)
+
+        if (deptMap.has(+deptid)) {
+            const department = deptMap.get(+deptid)
+            emp = await Employee.findAll({ where: { department }});
+        }
+        else { // admin
+            emp = await Employee.findAll();
         }
 
         return resolve(emp);
@@ -42,8 +46,21 @@ export async function getEmployeessByDepartmentIdService(deptid: string): Promis
 export async function createEmployeeService(name: string, salary: number, department: Department): Promise<EmployeeI> {
     return new Promise (async (resolve, reject) => {
         try {
-            const emp = await Employee.create({ name, salary, department });
-            return resolve(emp);
+            let emp: EmployeeI = { name: '', salary: 0, department: Department.HR}
+            const empobj = await Employee.findAll()
+
+            try {
+                const existEmp = empobj.some((emp: EmployeeI) => emp.name === name);
+                
+                if (!existEmp) {
+                    emp = await Employee.create({ name, salary, department });
+                    return resolve(emp)
+                } else {
+                    return resolve(emp)
+                }
+            } catch (e) {
+                return reject(e);   
+            }
         } catch (e) {
             return reject(e);   
         }

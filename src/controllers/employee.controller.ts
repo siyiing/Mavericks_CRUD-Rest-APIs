@@ -30,12 +30,15 @@ export async function getEmployeessByDepartmentId(req: Request, res: Response) {
 }
 
 
-
 // CREATE NEW EMPLOYEE 
 export async function createEmployee(req: Request, res: Response) {
     try {
         const emp = await Services.createEmployeeService(req.body.name, req.body.salary, req.body.department.toUpperCase()); 
-        res.status(200).json(emp);
+
+        if (emp.name !== '') 
+            return res.sendStatus(200);
+        else 
+            return res.sendStatus(400);
     }
     catch (e) {
         res.status(500).json({errorMessage: e});

@@ -37,4 +37,22 @@ export const authenticateToken: RequestHandler =  (req: Request, res: Response, 
     }
 }
 
+export const auth: RequestHandler =  (req: Request, res: Response, next: NextFunction) => {
+
+    const token = req.headers['authorization'];
+    if(!token) 
+        return res.status(403).json({message: "a token is required for authentication", requestState: 0});
+    
+    const bearer = token.split(' ');
+    const bearerToken = bearer[1];
+    console.log('be', bearerToken)
+
+    try{
+        const decoded = jwt.verify(bearerToken, process.env.ACCESS_TOKEN_SECRET as string);
+        next();
+    }catch(err){
+        return res.status(401).json({message: "invalid token", requestState: 0}); 
+    }
+}
+
 
