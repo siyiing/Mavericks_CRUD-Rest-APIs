@@ -46,11 +46,9 @@ export async function loginUser(req: Request, res: Response) {
         if (user) {
             const isSame = await bcrypt.compare(req.body.password, user.password); // hashed, plain
 
-            // if password is the same, generate token with the user's id and secretkey in the env file 
             if (isSame) {
                 const token = jwt.sign({username: user.username, departmentId: user.departmentId}, process.env.ACCESS_TOKEN_SECRET as string, { expiresIn: 1*24*60*60*1000});
 
-                // if password mathes with the one in database, generate a cookie for the user
                 res.cookie("token", token, { httpOnly: false})
                 // console.log('LOGIN USER', JSON.stringify(user, null, 2))
                 // console.log('LOGIN TOKEN', token);
