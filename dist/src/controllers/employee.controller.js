@@ -32,12 +32,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteEmployeeById = exports.updateEmployeeById = exports.getEmployeeById = exports.createEmployee = exports.getAllEmployee = exports.getBasePath = void 0;
+exports.deleteEmployeeById = exports.updateEmployeeById = exports.getEmployeeById = exports.createEmployee = exports.getEmployeessByDepartmentId = exports.getAllEmployee = exports.getBasePath = void 0;
 const Services = __importStar(require("../services/employee.services"));
 // BASE PATH 
 function getBasePath(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        res.send('Employee Operations');
+        res.json({ message: "employee operations" });
     });
 }
 exports.getBasePath = getBasePath;
@@ -54,12 +54,28 @@ function getAllEmployee(req, res) {
     });
 }
 exports.getAllEmployee = getAllEmployee;
+// RETURN EMPLOYEE  BY DEPARTMENT ID
+function getEmployeessByDepartmentId(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const user = yield Services.getEmployeessByDepartmentIdService(req.params.departmentId);
+            res.status(200).json(user);
+        }
+        catch (e) {
+            res.status(500).json({ errorMessage: e });
+        }
+    });
+}
+exports.getEmployeessByDepartmentId = getEmployeessByDepartmentId;
 // CREATE NEW EMPLOYEE 
 function createEmployee(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const emp = yield Services.createEmployeeService(req.body.name, req.body.salary, req.body.department.toUpperCase());
-            res.status(200).json(emp);
+            if (emp.name !== '')
+                return res.sendStatus(200);
+            else
+                return res.sendStatus(400);
         }
         catch (e) {
             res.status(500).json({ errorMessage: e });

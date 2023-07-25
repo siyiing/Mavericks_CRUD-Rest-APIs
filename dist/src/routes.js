@@ -25,18 +25,32 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const EmployeeController = __importStar(require("./controllers/employee.controller"));
 const employee_request_controller_1 = require("./controllers/employee.request.controller");
+const UserController = __importStar(require("./controllers/user.controller"));
+const user_request_controller_1 = require("./controllers/user.request.controller");
 function routes(app) {
     // BASE PATH 
     app.get('/', EmployeeController.getBasePath);
     // RETURN ALL THE EMPLOYEE
-    app.get('/employee', EmployeeController.getAllEmployee);
+    app.get('/employee', user_request_controller_1.authenticateToken, EmployeeController.getAllEmployee);
     // CREATE A NEW EMPLOYEE 
-    app.post('/employee', employee_request_controller_1.validateEmployee, EmployeeController.createEmployee);
+    app.post('/employee', user_request_controller_1.authenticateToken, employee_request_controller_1.validateEmployee, EmployeeController.createEmployee);
     // GET EMPLOYEE BY ID
-    app.get('/employee/:emp_id', EmployeeController.getEmployeeById);
+    app.get('/employee/:emp_id', user_request_controller_1.authenticateToken, EmployeeController.getEmployeeById);
     // UPDATE EMPLOYEE BY ID
-    app.put('/employee/:emp_id', employee_request_controller_1.validateEmployee, EmployeeController.updateEmployeeById);
+    app.put('/employee/:emp_id', user_request_controller_1.authenticateToken, employee_request_controller_1.validateEmployee, EmployeeController.updateEmployeeById);
     // DELETE EMPLOYEE BY ID 
-    app.delete('/employee/:emp_id', EmployeeController.deleteEmployeeById);
+    app.delete('/employee/:emp_id', user_request_controller_1.authenticateToken, EmployeeController.deleteEmployeeById);
+    // RETURN ALL THE USER
+    app.get('/user', user_request_controller_1.authenticateToken, UserController.getAllUser);
+    // CREATE A NEW USER // JWT 
+    app.post('/user', user_request_controller_1.validateUser, UserController.createUser);
+    // LOGIN // JWT 
+    app.post('/userlogin', UserController.loginUser);
+    // LOGOUT // JWT 
+    app.post('/userlogout', UserController.logoutUser);
+    // RETURN EMPLOYEES BY DEPARTMENT ID // NOT USING 
+    app.get('/employees/:departmentId', user_request_controller_1.authenticateToken, EmployeeController.getEmployeessByDepartmentId);
+    // AUTH 
+    app.post('/userauth', user_request_controller_1.auth, UserController.getAuth);
 }
 exports.default = routes;

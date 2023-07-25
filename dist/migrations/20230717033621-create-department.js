@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -10,30 +10,33 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-    up(queryInterface, Sequelize) {
+    up(queryInterface, DataTypes) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield queryInterface.bulkInsert('employees', [{
-                    uuid: '496aedf2-4545-482f-9487-3e0a38394a11',
-                    name: 'Apple',
-                    salary: 1,
-                    department: 'HR',
-                    createdAt: '2023-06-23T03:16:10.260Z',
-                    updatedAt: '2023-06-23T03:16:10.260Z'
+            yield queryInterface.createTable("departments", {
+                id: {
+                    allowNull: false,
+                    autoIncrement: true,
+                    primaryKey: true,
+                    type: DataTypes.INTEGER,
                 },
-                {
-                    uuid: '6f03a657-e911-42d6-89b3-ba150e5078f1',
-                    name: 'Banana',
-                    salary: 1,
-                    department: 'PS',
-                    createdAt: '2023-06-23T03:18:58.245Z',
-                    updatedAt: '2023-06-23T03:18:58.245Z'
-                }
-            ], {});
+                name: {
+                    type: DataTypes.STRING,
+                    allowNull: false,
+                },
+                createdAt: {
+                    allowNull: false,
+                    type: DataTypes.DATE,
+                },
+                updatedAt: {
+                    allowNull: false,
+                    type: DataTypes.DATE,
+                },
+            });
         });
     },
-    down(queryInterface, Sequelize) {
+    down(queryInterface, DataTypes) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield queryInterface.bulkDelete('employees', null, {});
+            yield queryInterface.dropTable("departments");
         });
-    }
+    },
 };

@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+    express:
+        container_name: siying_emp_api
+        image: emp_api:0.0.1
+        build: .
+        restart: always
+        networks:
+            - employeeAPI
+        ports:
+            - 8000:8000
+        # environment:
+        #   - NODE_ENV=docker
+        volumes:
+            - .:/usr/app
+            # - hostPath:containerPath:ro
+        depends_on:
+            - db
+
+    db:
+        container_name: siying_emp_api_db
+        image: 'postgres:14'
+        ports:
+            - 5434:5432 # Use port 5433 on my PC to connect to Dockerized DB
+        networks:
+            - employeeAPI
+        environment:
+            - POSTGRES_PASSWORD=${PASS_WORD}
+            - POSTGRES_DB=siying_db_production
+            - POSTGRES_USER=${USER_NAME}
+        volumes:
+            - emp_data:/data/db
+
+volumes:
+    emp_data: {}
+
+networks:
+    employeeAPI: {}
