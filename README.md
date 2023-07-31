@@ -48,7 +48,7 @@
 
 - `npm i sequelize`
 - install sequelize and postgresql: `npm install sequelize pg pg-hstore`
-- install sequelize cli: `sudo npm install -g sequelize-cli`
+- install sequelize cli: `npm install sequelize-cli`
 
 - `sequelize init` (create config, model, migration, seeders folder)
 - In config.json, under development, change the username, password, database and dialect
@@ -82,6 +82,8 @@ tableName: 'users',
 - `touch .gitignore`
 - \*\*/node_modules/
 
+######################################################################################################################################################
+
 # React
 
 - Create React + Typescript project (with existing folder): `npx create-react-app . --template typescript`
@@ -99,18 +101,18 @@ option > to go
 import option .
 for all method function is res. option space
 
-######################################################################
+######################################################################################################################################################
 
 - `npm install bcryptjs`
 
-######################################################################
+######################################################################################################################################################
 # JWT
 
 - `npm i epxress jsonwebtoken dotenv`
 -  `npm install cookie-parser`
 
 
-######################################################################
+######################################################################################################################################################
 # JWT 
 
 CMD: - `npm install jsonwebtoken dotenv`
@@ -179,3 +181,112 @@ app.get('/someRoute', (req, res) => {
 Note to handle:
 - expired tokens
 - invalid tokens 
+
+
+
+######################################################################################################################################################
+# DOCKER
+
+REMEMBER: `PRODUCTION` IN `CONFIG.JSON `NEEDS TO BE THE `SAME NAME AS THE DOCKER CONTAINER NAME (DB)`
+- DOWNLOAD DOCKER DESKTOP
+
+
+## NOTE:
+- always do backend first then frontend 
+- image is like an app, it have everything inside 
+- for backend and frontend, we need 3 files under root level: 
+
+
+1. `docker-compose.yml`
+  - for us to run command such as: `docker compose up --build` and `docker compose down` 
+  - note: the frontend compose file is different from the backend 
+  - inside this file, it requires 2 services namely: `express` and `db`. note that their naming convention MUST BE LOWERCASE.
+
+  - in `express`: 
+    -- change container name (reference as to which is our server in the docker app) 
+    -- CHANGE ports to 5000:8000
+
+  - in `db`: 
+    -- change container name (reference as to which is our server)
+    -- ports: 5434:5432 (redirect 5434 (my laptop port) to 5432 (docker port))
+    -- environment: update the username (from .env) and password (from .env) and the db name ()
+
+
+2. `Dockerfile`: it can only have 1 `CMD`. if want to run other command, can use `RUN`. e.g. `RUN install...` or `RUN build` etc
+  - it process and proceed to build an image 
+  - need declare work version, work directory 
+  
+
+  FROM node:16-alpine3.14
+  WORKDIR /usr/app
+  COPY package.json ./  # copy package.json to work directory `./`
+  RUN npm install
+  COPY . . # copy all code to work directory 
+  RUN NODE_ENV=production
+  # RUN npm run db:init
+  # RUN npm run build
+  EXPOSE 8000  # CHANGE TO 5000
+  # CMD ["NODE_ENV=test", "npm", "start"]
+  CMD ["npm" , "start"]  // is forever the last line 
+  # CMD ["npm", "run", "undoMigrate"]
+
+
+3. `.dockerignore`: need ignore `node_module` and `.git` 
+
+
+## How to Run Docker 
+1. edit `package.json`. 
+- NOTE: we need edit the `build` and edit the `start`. the `start` is the command we run at the first time so we need create db and then migrate  
+
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "PORT=5000 nodemon src/app.ts",
+    "start": "NODE_ENV=production npx sequelize db:migrate && npm run build && NODE_ENV=production node dist/app.js",
+    "build": "npx tsc"
+  },
+
+2. edit `.env` 
+- need to add the `USER_NAME` and `PASS_WORD`
+
+
+3. when we run for the first time, we will have error, thus need go to my own pgAdmin to create a server and then a db.
+- In pgAdmin, `TAB > REGISTER > SERVER`, create a server and set the following: 
+  -- host: localhost
+  -- port: 5434
+
+- When server is created, login and create a db. 
+  -- `NOTE`, db name MUST BE the same as the environment name in the docker db (in docker-compose.yml)
+
+- When db is created, rebuild the project by running: `docker compose down` then `docker compose up --build`  
+
+4. RUN DOCKER 
+- first time run, `docker compose up --build`  
+- look at error, fix error
+- before running again, need `docker compose down` then `docker compose up --build`  
+- note: if it run on dev instead of production, then we need go `package-lock.json`. under `script` and `start` add `NODE:ENV=production` at the start 
+- note: when run docker and see migration - this means that our db connection is done alr. 
+
+
+# GOOD TO HAVE: 
+- in `.gitignore`, add `.env` or `.env.*`  or `!.env.template` 
+- can create a `env.template` at the root directory and copy stuff from `.env` to inside 
+- usually, e.g. `token = <JWT_Token_Sercret_kEY>`. MUST have `<description of the variable>`
+
+
+
+# ?
+at package.json
+- 3 ways to import env variables
+- `.env` file or go script and BEFORE node or nodemon, declare the env there OR start: `PORT = 5000 node dist.app/js`
+
+to run program, IN SCRIPT 
+need prettier, mirgate 
+NODE_ENV = development run migrate and the NODE_ENV - DEVELOPMENT NODEMON SRC.APP.TS
+
+
+
+
+
+
+
+
